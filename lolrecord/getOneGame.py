@@ -1,31 +1,56 @@
 # coding:utf-8
 import requests
 import json
+import config
 
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-gameId = "3992850382"
-url = "https://lol.sw.game.qq.com/lol/api/?c=Battle&a=combatGains&areaId=6&gameId={}&r1=combatGains"
-headers = {'cookie': 'tvfe_boss_uuid=a3fd2c426ef14455; ue_uid=75f3396c0983742d2f7360e284cd0390; RK=UAvj4TJqd7; ts_uid=3394960024; pgv_pvi=7898544128; o_cookie=1035628914; pgv_pvid=7383762540; ptcz=20951b80f91035c238b1966f3978fcbe22123cc2895e56019a29f70f3d06727b; pac_uid=1_1035628914; ue_uk=16d2cc594bb061290e306ede8d12eeb5; LW_pid=fed0b1e3213a119cdd06c3af6d28e051; ue_ts=1537581100; ue_skey=5dbc27e7e0847ef6d4daacf1f6d57ec3; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%221686e3ef28648b-05e3f9cd2d58e7-9393265-1327104-1686e3ef28743c%22%2C%22%24device_id%22%3A%221686e3ef28648b-05e3f9cd2d58e7-9393265-1327104-1686e3ef28743c%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E8%87%AA%E7%84%B6%E6%90%9C%E7%B4%A2%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22https%3A%2F%2Fwww.baidu.com%2Flink%22%2C%22%24latest_referrer_host%22%3A%22www.baidu.com%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC%22%7D%7D; ied_qq=o1035628914; uin_cookie=o1035628914; XWINDEXGREY=0; eas_sid=01t5h8K2O6G4i4w5C1W6H9z6j4; PTTuserFirstTime=1585267200000; iip=0; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; LW_uid=0185t9V8C6P8x3P1c4Q6t4G3F9; LW_sid=t1U5N9S8S6u8a3C2g083O5P3O0; ptui_loginuin=1035628914; gpmtips_data_his=%5B%7B%22id%22%3A%22308095%22%2C%22valid%22%3A1586532196%7D%2C%7B%22id%22%3A%22326935%22%2C%22valid%22%3A1610273668%7D%5D; PTTosSysFirstTime=1609027200000; PTTosFirstTime=1609027200000; weekloop=53-0-0-3; uin=o1035628914; isActDate=18642; PTTactFirstTime=1610668800000; LOLWebSet_AreaBindInfo_1035628914=%257B%2522areaid%2522%253A%25226%2522%252C%2522areaname%2522%253A%2522%25E5%25BE%25B7%25E7%258E%259B%25E8%25A5%25BF%25E4%25BA%259A%2520%25E7%25BD%2591%25E9%2580%259A%2522%252C%2522sRoleId%2522%253A0%252C%2522roleid%2522%253A%25221035628914%2522%252C%2522rolename%2522%253A%2522%25E4%25B8%258D%25E4%25B8%25A2%25E8%25B7%2591%25E8%25BD%25A6%25E4%25B8%25A8%25E5%25B0%258F%25E5%25AD%25A6%25E7%2594%259F%2522%252C%2522checkparam%2522%253A%2522lol%257Cyes%257C1035628914%257C6%257C1035628914*%257C%257C%257C%257C%2525E4%2525B8%25258D%2525E4%2525B8%2525A2%2525E8%2525B7%252591%2525E8%2525BD%2525A6%2525E4%2525B8%2525A8%2525E5%2525B0%25258F%2525E5%2525AD%2525A6%2525E7%252594%25259F*%257C%257C%257C1610718954%257C%2522%252C%2522md5str%2522%253A%2522AEC6C82F590AFB90B59C6B942DDAEC66%2522%252C%2522roleareaid%2522%253A%25226%2522%252C%2522sPartition%2522%253A%25226%2522%257D; isHostDate=18643; pgv_info=ssid=s8535682136; _qpsvr_localtk=0.3069003065056002; gpmtips_cfg=%7B%22iSendApi%22%3A0%2C%22iShowCount%22%3A0%2C%22iOnlineCount%22%3A0%2C%22iSendOneCount%22%3A0%2C%22iShowAllCount%22%3A0%2C%22iHomeCount%22%3A0%7D; skey=@KgUUpMMYb; IED_LOG_INFO2=userUin%3D1035628914%26nickName%3Dohh%26nickname%3Dohh%26userLoginTime%3D1610769858%26logtype%3Dqq%26loginType%3Dqq%26uin%3D1035628914; isOsSysDate=18643; isOsDate=18643; tokenParams=%3Fe_code%3D507042; lolqqcomrouteLine=space_space_a20200608eternals_index-tool_index-page_space_space; ts_last=lol.qq.com/space/index.shtml',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'
-        }
+cookie = config.cookie
+def getGameInfo(gameId):
+    # gameId = "3992850382"
+    #gameId = "3987691951"
+    url = "https://lol.sw.game.qq.com/lol/api/?c=Battle&a=combatGains&areaId=6&gameId={}&r1=combatGains"
+    headers = {'cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'
+            }
 
-url = url.format(gameId)
-res = requests.get(url, headers = headers)
-j = json.loads(res.text[18:])
-particpiants = j['msg']['participants']
+    url = url.format(gameId)
+    res = requests.get(url, headers = headers)
+    # print res.text[18:]
+    j = json.loads(res.text[18:])
+    particpiants = j['msg']['participants']
 
-starttime = j['msg']['gameInfo']['gameCreationTime']
-for own in particpiants:
-    username = own['summonerName']
-    uid = own['originalAccountId']
-    status = own['stats']
-    win = status['win']
-    kills = status['kills']
-    assists = status['assists']
-    deaths = status['deaths']
-    reslist = [username, uid, win, kills, assists, deaths]
-    print '\t'.join([str(x) for x in reslist])
+    starttime = j['msg']['gameInfo']['gameCreationTime']
+    for own in particpiants:
+        username = own['summonerName']
+        uid = own['originalAccountId']
+        status = own['stats']
+        win = status['win']
+        kills = status['kills']
+        assists = status['assists']
+        deaths = status['deaths']
+        reslist = [username, uid, win, kills, assists, deaths]
+        print '\t'.join([str(x) for x in reslist])
+    print "\n\n\n"
+    return j
 
+def get_all_game():
+    gameids = [3985288243, 3987568564, 3987691950, 3988416552, 3988465750, 3988990434, 3992850382, 3992887550, 3993946520, 3993974727, 3994027573, 3994099437, 3995163280, 3995233116, 3995324871, 3995350251, 3995432547, 3995475684, 3995501214, 3995504708, 3995510322, 3995516732, 3995552119, 3995631829, 3995650876, 3995659802, 3995692522, 3995695427, 3995721430, 3995736461, 3995750045, 3995801564, 3995846634, 3996104115, 3996299398, 3996377875, 3996458086]
+    gameids.sort()
+    gameids.reverse()
+
+    res = []
+    for gid in gameids:
+        res.append(getGameInfo(gid))
+
+    write_games(res)
+
+def write_games(res):
+    with open('gamesInfo.txt', 'w') as f:
+        for j in res:
+            f.write(json.dumps(j)+"\n")
+    
+if __name__ == '__main__':
+    get_all_game()
